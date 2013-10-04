@@ -237,7 +237,9 @@ public class PageView extends BounceSwipeView
 		if(!mCarouselMode && getCurrentPage()==getPageCount()-1 && page>=getCurrentPage() ||
 			!mCarouselMode && getCurrentPage()==0 && page<=0)
 		{
-			doAtEdgeAnimation();
+			if(getBounceEnabled()) {
+				doAtEdgeAnimation();
+			}
 		}
 		else if(getCurrentPage()!=page)
 		{
