@@ -100,7 +100,7 @@ public class PageView extends BounceSwipeView
 				}
 			});
 
-			if(mAdapter.getCount()<=1)
+			if(mAdapter.getCount()<=1 && mCarouselMode)
 			{
 				setBounceEnabled(true);
 			}
