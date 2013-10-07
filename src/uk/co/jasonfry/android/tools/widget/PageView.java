@@ -239,12 +239,31 @@ public class PageView extends BounceSwipeView
 		{
 			if(getBounceEnabled()) {
 				doAtEdgeAnimation();
+			} 
+			else 
+			{
+				superScrollToPage(page, smooth);
 			}
 		}
 		else if(getCurrentPage()!=page)
 		{
 			rearrangePages(getCurrentPage(), page, smooth);
 			notifiyAssignedOnPageChangedListener(page);
+		} 
+		else
+		{
+			superScrollToPage(page, smooth);
+		}
+	}
+
+	private void superScrollToPage(int page, boolean smooth) {
+		if(smooth) 
+		{
+			super.smoothScrollToPage(page);
+		} 
+		else 
+		{
+			super.scrollToPage(page);
 		}
 	}
 	
