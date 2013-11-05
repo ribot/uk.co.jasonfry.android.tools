@@ -218,6 +218,34 @@ public class PageView extends BounceSwipeView
 			page=page-2;
 		}
 		super.addView(mAdapter.getView(page, convertView, getChildContainer()), position);
+		
+		resetMargins();
+	}
+	
+	private void resetMargins() 
+	{
+	    int childCount = getChildContainer().getChildCount();
+        
+        for(int i = 0; i < childCount; i++)
+        {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            if(i == 0)
+            {
+                params.leftMargin = mOffset;
+                params.rightMargin = 0;
+            } 
+            else if(i == childCount-1)
+            {
+                params.rightMargin = mOffset;
+                params.leftMargin = 0;
+            } 
+            else 
+            {
+                params.leftMargin = 0;
+                params.rightMargin = 0;
+            }
+            getChildContainer().getChildAt(i).setLayoutParams(params);
+        }
 	}
 	
 	@Override
