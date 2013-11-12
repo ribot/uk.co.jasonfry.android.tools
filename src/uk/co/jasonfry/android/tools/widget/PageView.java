@@ -16,7 +16,7 @@ public class PageView extends BounceSwipeView
 	private Adapter mAdapter;
 	private OnPageChangedListener mOnPageChangedListener; //as we are implementing our own OnPageChangedListener we need to keep the one set by a class implementing a CarouseView and then call it after we've done our bits. 
 	private int mCurrentPage;
-	private int mOldCurrentPage;
+	private int mPreviousPage;
 	private int mOffset;
 	private boolean mCarouselMode = false;
 	
@@ -301,7 +301,7 @@ public class PageView extends BounceSwipeView
 		//call the OnPageChangedListener that might have been set by a class implementing a PageView
 		if(mOnPageChangedListener !=null)
 		{
-			mOnPageChangedListener.onPageChanged(mOldCurrentPage, mCurrentPage);
+			mOnPageChangedListener.onPageChanged(mPreviousPage, mCurrentPage);
 		}
 	}
 	
@@ -431,7 +431,7 @@ public class PageView extends BounceSwipeView
 	}
 
 	private void assignNewValueToMCurrentPage(int newCurrentPage) {
-		mOldCurrentPage = mCurrentPage;
+		mPreviousPage = mCurrentPage;
 		mCurrentPage = newCurrentPage;
 	}
 	
