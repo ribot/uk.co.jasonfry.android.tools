@@ -16,6 +16,7 @@ public class PageView extends BounceSwipeView
 	private Adapter mAdapter;
 	private OnPageChangedListener mOnPageChangedListener; //as we are implementing our own OnPageChangedListener we need to keep the one set by a class implementing a CarouseView and then call it after we've done our bits. 
 	private int mCurrentPage;
+	private int mPreviousPage;
 	private int mOffset;
 	private boolean mCarouselMode = false;
 	
@@ -79,7 +80,7 @@ public class PageView extends BounceSwipeView
 		mAdapter = adapter;
 		if(mAdapter!=null)
 		{
-			mCurrentPage=startPosition;
+			assignNewValueToMCurrentPage(startPosition);
 			fillCarousel(startPosition);
 			post(new Runnable()
 			{
@@ -300,30 +301,7 @@ public class PageView extends BounceSwipeView
 		//call the OnPageChangedListener that might have been set by a class implementing a PageView
 		if(mOnPageChangedListener !=null)
 		{
-			if(mCarouselMode && mCurrentPage==0 && newPage==2) //looping round to end from begining 
-			{
-				mOnPageChangedListener.onPageChanged(mAdapter.getCount()-1, mCurrentPage);
-			}
-			else if(mCarouselMode && mCurrentPage==mAdapter.getCount()-1 && newPage==0) //looping round from end back to begining
-			{
-				mOnPageChangedListener.onPageChanged(0, mCurrentPage);
-			}
-			else if(!mCarouselMode && mCurrentPage==1 && newPage==1) //going from first page into second, not using carousel
-			{
-				mOnPageChangedListener.onPageChanged(0,1);
-			}
-			else if(!mCarouselMode && mCurrentPage==mAdapter.getCount()-1 && newPage==mAdapter.getCount()-1)
-			{
-				mOnPageChangedListener.onPageChanged(mCurrentPage,mAdapter.getCount()-2);
-			}
-			else if(newPage==2) //going forwards
-			{
-				mOnPageChangedListener.onPageChanged(mCurrentPage-1, mCurrentPage);
-			}
-			else //if(newPage==0) //going backwards
-			{
-				mOnPageChangedListener.onPageChanged(mCurrentPage+1, mCurrentPage);
-			}
+			mOnPageChangedListener.onPageChanged(mPreviousPage, mCurrentPage);
 		}
 	}
 	
@@ -344,12 +322,12 @@ public class PageView extends BounceSwipeView
 				}
 				else if(mCurrentPage<=0)
 				{
-					mCurrentPage=1;
+					assignNewValueToMCurrentPage(1);
 					pageToScrollTo=1;
 				}
 				else
 				{
-					mCurrentPage=getAdapterPageCount()-1;
+					assignNewValueToMCurrentPage(getAdapterPageCount()-1);
 					pageToScrollTo=2;
 				}
 			}
@@ -364,12 +342,12 @@ public class PageView extends BounceSwipeView
 				}
 				else if(mCurrentPage>=getAdapterPageCount()-1)
 				{
-					mCurrentPage=getAdapterPageCount()-2;
+					assignNewValueToMCurrentPage(getAdapterPageCount()-2);
 					pageToScrollTo=1;
 				}
 				else
 				{
-					mCurrentPage=0;
+					assignNewValueToMCurrentPage(0);
 					pageToScrollTo=0;
 				}
 			}
@@ -399,11 +377,11 @@ public class PageView extends BounceSwipeView
 	{
 		if(mCurrentPage<getAdapterPageCount()-1)
 		{
-			mCurrentPage++;
+			assignNewValueToMCurrentPage(mCurrentPage+1);
 		}
 		else
 		{
-			mCurrentPage=0;
+			assignNewValueToMCurrentPage(0);
 		}
 		
 		if(mCurrentPage<getAdapterPageCount()-1)
@@ -420,11 +398,11 @@ public class PageView extends BounceSwipeView
 	{
 		if(mCurrentPage>0)
 		{
-			mCurrentPage--;
+			assignNewValueToMCurrentPage(mCurrentPage-1);
 		}
 		else
 		{
-			mCurrentPage=getAdapterPageCount()-1;
+			assignNewValueToMCurrentPage(getAdapterPageCount()-1);
 		}
 		
 		if(mCurrentPage>0)
@@ -451,12 +429,17 @@ public class PageView extends BounceSwipeView
 		getChildContainer().removeViewAt(2);
 		loadPage(backPageToLoad,0,convertView);
 	}
+
+	private void assignNewValueToMCurrentPage(int newCurrentPage) {
+		mPreviousPage = mCurrentPage;
+		mCurrentPage = newCurrentPage;
+	}
 	
 	public void itemAddedToAdapter(int position)
 	{
 		if(position<=mCurrentPage)
 		{
-			mCurrentPage++;
+			assignNewValueToMCurrentPage(mCurrentPage+1);
 		}
 		if(mAdapter.getCount()>1)
 		{
@@ -470,7 +453,7 @@ public class PageView extends BounceSwipeView
 	{
 		if(position<=mCurrentPage && mCurrentPage!=0)
 		{
-			mCurrentPage--;
+			assignNewValueToMCurrentPage(mCurrentPage-1);
 		}
 		
 		refill(position);
