@@ -281,6 +281,7 @@ public class PageView extends BounceSwipeView
 		} 
 		else
 		{
+			assignNewValueToMCurrentPage(page);
 			superScrollToPage(page, smooth);
 		}
 	}
