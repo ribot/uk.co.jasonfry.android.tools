@@ -311,7 +311,11 @@ public class PageView extends BounceSwipeView
 		if(getAdapterPageCount()>1)
 		{
 			final int pageToScrollTo;
-			if(newPage>=oldPage+1)//going forwards
+			if(!mCarouselMode && getAdapterPageCount() == 2) {
+				pageToScrollTo = newPage;
+				assignNewValueToMCurrentPage(newPage);
+			}
+			else if(newPage>=oldPage+1)//going forwards
 			{
 				if(mCarouselMode || mCurrentPage<getAdapterPageCount()-2 && mCurrentPage>0)
 				{
