@@ -55,6 +55,7 @@ public class SwipeView extends HorizontalScrollView
 	private SwipeOnTouchListener mSwipeOnTouchListener;
 	private View.OnTouchListener mOnTouchListener;
 	private PageControl mPageControl = null;
+	private boolean mTouchEnabled = true;
 
 	/**
 	 * {@inheritDoc}
@@ -379,6 +380,16 @@ public class SwipeView extends HorizontalScrollView
 	{
 		return mPageControl;
 	}
+
+	public void setTouchEnabled(boolean enabled)
+	{
+		mTouchEnabled = enabled;
+	}
+
+	public boolean getTouchEnabled()
+	{
+		return mTouchEnabled;
+	}
 	
 	/**
 	 * Implement this listener to listen for page change events
@@ -420,6 +431,11 @@ public class SwipeView extends HorizontalScrollView
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev)
 	{
+		if(!mTouchEnabled) 
+		{
+			return false;
+		}
+
 		super.onInterceptTouchEvent(ev);
 		
 		if(ev.getAction() == MotionEvent.ACTION_DOWN)
@@ -449,6 +465,16 @@ public class SwipeView extends HorizontalScrollView
 		
 		return false;
 	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent ev)
+	{
+		if(!mTouchEnabled) 
+		{
+			return false;
+		}
+		return super.onTouchEvent(ev);
+	}
 	
 	private void detectMostlyScrollingDirection(MotionEvent ev)
 	{
@@ -477,6 +503,11 @@ public class SwipeView extends HorizontalScrollView
 		
 		public boolean onTouch(View v, MotionEvent event) 
 		{
+			if(!mTouchEnabled) 
+			{
+				return false;
+			}
+
 			if(mOnTouchListener!=null && !mJustInterceptedAndIgnored || mOnTouchListener!=null && mSendingDummyMotionEvent) //send on touch event to onTouchListener set by an application implementing a SwipeView and setting their own onTouchListener
 			{
 				if(mOnTouchListener.onTouch(v, event))
