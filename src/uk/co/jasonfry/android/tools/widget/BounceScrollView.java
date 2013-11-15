@@ -46,6 +46,10 @@ public class BounceScrollView extends ScrollView {
 	private boolean mBouncingBottomEnabled = true;
 	private boolean mBouncing = false;
 	private int mFriction = DEFAULT_FRICTION;
+	private float mMotionStartX;
+	private float mMotionStartY;
+	private boolean mMostlyScrollingInX;
+	private boolean mMostlyScrollingInY;
 	
 	
 	public BounceScrollView(Context context) {
@@ -206,6 +210,48 @@ public class BounceScrollView extends ScrollView {
 	
 	public int getFriction() {
     	return mFriction;
+	}
+
+	@Override
+	public boolean onInterceptTouchEvent(MotionEvent ev) {
+		super.onInterceptTouchEvent(ev);
+		
+		if(ev.getAction() == MotionEvent.ACTION_DOWN) {
+			mMotionStartX = ev.getX();
+			mMotionStartY = ev.getY();
+			mMostlyScrollingInX = false;
+			mMostlyScrollingInY = false;
+		} else if(ev.getAction()==MotionEvent.ACTION_MOVE) {
+			detectMostlyScrollingDirection(ev);
+		} 
+
+		if(mMostlyScrollingInY) {
+			return true;
+		}
+		
+		if(mMostlyScrollingInX) {
+			return false;
+		}
+		
+		return false;
+	}
+	
+	private void detectMostlyScrollingDirection(MotionEvent ev)
+	{
+		if(!mMostlyScrollingInX && !mMostlyScrollingInY) //if we dont know which direction we're going yet
+		{
+			float xDistance = Math.abs(mMotionStartX - ev.getX());
+			float yDistance = Math.abs(mMotionStartY - ev.getY());
+			
+			if(yDistance>xDistance+5)
+			{
+				mMostlyScrollingInY = true;
+			}
+			else if(xDistance>yDistance+5)
+			{
+				mMostlyScrollingInX = true;
+			}
+		}
 	}
 	
 	private class BounceViewOnTouchListener implements View.OnTouchListener {

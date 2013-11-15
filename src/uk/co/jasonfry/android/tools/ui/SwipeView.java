@@ -420,7 +420,7 @@ public class SwipeView extends HorizontalScrollView
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev)
 	{
-		boolean result = super.onInterceptTouchEvent(ev);
+		super.onInterceptTouchEvent(ev);
 		
 		if(ev.getAction() == MotionEvent.ACTION_DOWN)
 		{
@@ -447,7 +447,7 @@ public class SwipeView extends HorizontalScrollView
 			return true;
 		}
 		
-		return result;
+		return false;
 	}
 	
 	private void detectMostlyScrollingDirection(MotionEvent ev)
