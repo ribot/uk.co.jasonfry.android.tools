@@ -304,6 +304,8 @@ public class SwipeView extends HorizontalScrollView
 		{
 			mPageControl.setCurrentPage(page);
 		}
+
+		mCallScrollToPageInOnLayout=true;
 	}
 	
 	/**
