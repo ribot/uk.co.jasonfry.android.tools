@@ -5,3 +5,4 @@ gen/*
 default.properties
 local.properties
 .classpath
+build/
